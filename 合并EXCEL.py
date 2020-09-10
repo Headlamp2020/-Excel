@@ -8,7 +8,7 @@ import pandas as pd
 import os
 
 folder = r'C:\Users\gaodengke\Desktop\待合并'
-file_list = os.listdir(folder)
+file_list = os.listdir(folder)  # 获得文件内所有文件名
 record_path = r'C:\Users\gaodengke\Desktop\合并后\日志.xlsx'
 report_path = r'C:\Users\gaodengke\Desktop\合并后\体检报告.xlsx'
 all_path = r'C:\Users\gaodengke\Desktop\合并后\整个报告.xlsx'
@@ -19,10 +19,10 @@ def all_in_one():
     df_report = pd.DataFrame()
     with pd.ExcelWriter(all_path) as writer:
         for file in file_list:
-            file_path = os.path.join(folder, file)
-            df_report1 = pd.read_excel(file_path, '体检报告').dropna(how='all')
+            file_path = os.path.join(folder, file)  # 合并地址和文件名
+            df_report1 = pd.read_excel(file_path, '体检报告').dropna(how='all')  # 删除全部为空的行
             df_record1 = pd.read_excel(file_path, '日志').dropna(how='all')
-            df_report = pd.concat([df_report, df_report1]).drop_duplicates()
+            df_report = pd.concat([df_report, df_report1]).drop_duplicates()  # 删除合并产生的重复的列名
             df_record = pd.concat([df_record, df_record1]).drop_duplicates()
             df_report.to_excel(writer, '体检报告')
             df_record.to_excel(writer, '日志')
@@ -30,7 +30,7 @@ def all_in_one():
 
 def sheet_in_one():
     dict = {record_path: '日志', report_path: '体检报告'}
-    for path, sheet_name in dict.items():
+    for path, sheet_name in dict.items():  # 循环取出字典内的地址和列名
         with pd.ExcelWriter(path) as writer:
             for file in file_list:
                 file_path = os.path.join(folder, file)
