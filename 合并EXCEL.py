@@ -20,8 +20,8 @@ def all_in_one():
     with pd.ExcelWriter(all_path) as writer:
         for file in file_list:
             file_path = os.path.join(folder, file)
-            df_report1 = pd.read_excel(file_path, '体检报告')
-            df_record1 = pd.read_excel(file_path, '日志')
+            df_report1 = pd.read_excel(file_path, '体检报告').dropna(how='all')
+            df_record1 = pd.read_excel(file_path, '日志').dropna(how='all')
             df_report = pd.concat([df_report, df_report1]).drop_duplicates()
             df_record = pd.concat([df_record, df_record1]).drop_duplicates()
             df_report.to_excel(writer, '体检报告')
@@ -34,7 +34,7 @@ def sheet_in_one():
         with pd.ExcelWriter(path) as writer:
             for file in file_list:
                 file_path = os.path.join(folder, file)
-                df_record = pd.read_excel(file_path, sheet_name=sheet_name)
+                df_record = pd.read_excel(file_path, sheet_name=sheet_name).dropna(how='all')
                 df_record.to_excel(writer, sheet_name=file[0:5])
 
 
